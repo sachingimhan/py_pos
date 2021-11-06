@@ -5,4 +5,3 @@ This Project works on Python 3 install Python to your computer and then run belo
 ```
 pip install -r requirements.txt
 ```
-https://github.com/ClassExamples/Flask-DB-Access
