@@ -1,37 +1,57 @@
 from os import name
-from re import S
-from flask import Flask,render_template,request
+from re import I
+from flask import Flask,render_template,request,session,jsonify
 import flask
 from flask_sqlalchemy import SQLAlchemy
-
+from collections import namedtuple
+import json
 application = Flask(__name__)
-application.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://admin:admin1234@aa155qin9bd71l6.cb1v5s5uduqk.us-east-2.rds.amazonaws.com:3306/ebdb"
+application.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://admin:password123@database-1.cb1v5s5uduqk.us-east-2.rds.amazonaws.com:3306/pyposdb"
+application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(application)
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
+ItemData = namedtuple("ItemData",['itemId','itemDesc','itemPrice','itemQty'])
 
-    def __repr__(self):
-        return '<User %r>' % self.username
+import model.Item as Item
 
 db.create_all()
+db.session.commit()
 
 @application.route('/')
 def route_home():
     return render_template('index.html')
 
-@application.route('/item')
+@application.route('/item',methods=['GET','POST','PUT','DELETE'])
 def route_item():
-    return render_template('item.html')
+    if request.method == 'GET':
+        itm = db.session.query(Item.Item).all()
+        return render_template('item.html',itms=itm)
+        # return jsonify({'data':itm})
+    elif request.method == 'POST':
+       data = request.get_json()
+       data = ItemData(**data)
+       if data.itemId != None and data.itemDesc != None and data.itemPrice != None and data.itemQty != None :
+           itm = Item.Item(data.itemId,data.itemDesc,data.itemPrice,data.itemQty)
+           db.session.add(itm)
+           db.session.commit()
+           return jsonify({'status':'Success'})
+    elif request.method == 'PUT':
+        itemId = request.args.get('itemId')
+        data = request.get_json()
+        data = ItemData(**data)
+        db.session.query(Item.Item).filter_by(id=itemId).update(dict(description=data.itemDesc,unit_price=data.itemPrice,qty=data.itemQty))
+        db.session.commit()
+        return jsonify({'status':'Success'})
+    elif request.method == 'DELETE':
+        itemId = request.args.get('itemId')
+        db.session.query(Item.Item).filter(Item.Item.id == itemId).delete()
+        db.session.commit()
+        db.session.flush()
+        return jsonify({ 'status':'Success' })
 
-@application.route("/items")
-def add_item():
-    user = User(username='admin', email='admin@example.com')
-    db.session.add(user)
-    db.session.commit()
-    return "Item Added"
+@application.errorhandler(404)
+def error_404(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     application.run(debug=True)

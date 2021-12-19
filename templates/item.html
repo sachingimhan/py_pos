@@ -1,201 +1,285 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Item</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-      crossorigin="anonymous"
-    />
-  </head>
 
-  <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-2">
-      <a class="navbar-brand" href="#">Py POS</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item active">
-            <a class="nav-link" href="/">Place Order</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/item">Item</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Report</a>
-          </li>
-        </ul>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Item</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-2">
+    <a class="navbar-brand" href="#">Py POS</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Place Order</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/item">Item</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Report</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!--  -->
+  <!-- Modal -->
+  <div class="modal fade" id="updateModel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col">
+              <div class="form-group mt-2">
+                <label for="uitemId">Item ID</label>
+                <input type="text" class="form-control" id="uitemId" placeholder="ID" disabled />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group mt-2">
+                <label for="uitemDesc">Item Description</label>
+                <input type="text" class="form-control" id="uitemDesc" placeholder="Description" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group mt-2">
+                <label for="uitemPrice">Item Unit Price</label>
+                <input type="text" class="form-control" id="uitemPrice" placeholder="Unit Price" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="form-group mt-2">
+                <label for="uitemQty">Item QTY</label>
+                <input type="text" class="form-control" id="uitemQty" placeholder="QTY" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button id="btnUpdate" onclick="updateItemData()" type="button" class="btn btn-warning">Update</button>
+        </div>
       </div>
-    </nav>
-    <div class="container-fluid mt-4">
-      <div class="row">
-        <div class="col">
-          <div class="card">
-            <div class="card-header">Items</div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col">
-                  <div class="card">
-                    <div class="card-header">Item Details</div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col">
-                          <div class="form-group mt-2">
-                            <label for="itemId">Item ID</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="itemId"
-                              placeholder="ID"
-                            />
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="form-group mt-2">
-                            <label for="itemDesc">Item Description</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="itemDesc"
-                              placeholder="Description"
-                            />
-                          </div>
+    </div>
+  </div>
+  <!--  -->
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">Items</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">Item Details</div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col">
+                        <div class="form-group mt-2">
+                          <label for="itemId">Item ID</label>
+                          <input type="text" class="form-control" id="itemId" placeholder="ID" />
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col">
-                          <div class="form-group mt-2">
-                            <label for="itemPrice">Item Unit Price</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="itemPrice"
-                              placeholder="Unit Price"
-                            />
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="form-group mt-2">
-                            <label for="itemQty">Item QTY</label>
-                            <input
-                              type="text"
-                              class="form-control"
-                              id="itemQty"
-                              placeholder="QTY"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          <button class="btn btn-primary float-end mt-2">
-                            Save Item
-                          </button>
+                      <div class="col">
+                        <div class="form-group mt-2">
+                          <label for="itemDesc">Item Description</label>
+                          <input type="text" class="form-control" id="itemDesc" placeholder="Description" />
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div class="col-4">
-                  <div class="card">
-                    <div class="card-header">Actions</div>
-                    <div class="card-body">
-                      <div class="row mb-2">
-                        <div class="col">
-                          <input
-                            class="form-control me-2"
-                            type="search"
-                            placeholder="Search"
-                            aria-label="Search"
-                          />
+                    <div class="row">
+                      <div class="col">
+                        <div class="form-group mt-2">
+                          <label for="itemPrice">Item Unit Price</label>
+                          <input type="text" class="form-control" id="itemPrice" placeholder="Unit Price" />
                         </div>
                       </div>
-                      <div class="row mb-2">
-                        <div class="col">
-                          <button
-                            class="btn btn-success float-end"
-                            type="button"
-                          >
-                            Search
-                          </button>
+                      <div class="col">
+                        <div class="form-group mt-2">
+                          <label for="itemQty">Item QTY</label>
+                          <input type="text" class="form-control" id="itemQty" placeholder="QTY" />
                         </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <button id="btnSave" class="btn btn-primary float-end mt-2">
+                          Save Item
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="row mt-2">
-                <div class="col">
-                  <table class="table table-striped table-responsive">
-                    <thead class="text-center">
-                      <tr>
-                        <th scope="col">Item ID</th>
-                        <th scope="col">Description</th>
-                        <th scope="col">Unit Price</th>
-                        <th scope="col">QTY</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody class="text-center">
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Sope</td>
-                        <td>70</td>
-                        <td>20</td>
-                        <td>
-                          <button class="btn btn-warning">Update</button>
-                          <button class="btn btn-danger">Delete</button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th scope="row">2</th>
-                        <td>Milo</td>
-                        <td>55</td>
-                        <td>30</td>
-                        <td>
-                          <button class="btn btn-warning">Update</button>
-                          <button class="btn btn-danger">Delete</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
+              <div class="col-4">
+                <div class="card">
+                  <div class="card-header">Actions</div>
+                  <div class="card-body">
+                    <div class="row mb-2">
+                      <div class="col">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+                      </div>
+                    </div>
+                    <div class="row mb-2">
+                      <div class="col">
+                        <button class="btn btn-success float-end" type="button">
+                          Search
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+            <div class="row mt-2">
+              <div class="col">
+                <table class="table table-striped table-responsive">
+                  <thead class="text-center">
+                    <tr>
+                      <th scope="col">Item ID</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Unit Price</th>
+                      <th scope="col">QTY</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center">
+                    {% for itm in itms %}
+                    <tr>
+                      <th scope="row">{{itm['id']}}</th>
+                      <td>{{itm['description']}}</td>
+                      <td>{{itm['unit_price']}}</td>
+                      <td>{{itm['qty']}}</td>
+                      <td>
+                        <button onclick="updateItem(this)" class="btn btn-warning" data-bs-toggle="modal"
+                          data-bs-target="#updateModel">Update</button>
+                        <button onclick="deleteItem(this)" class="btn btn-danger">Delete</button>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- Bootstrap JS Lib -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-      integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+
+
+  <!-- Bootstrap JS Lib -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script>
+    function updateItem(x) {
+      let id = $($(x).closest('tr').children()).get(0).innerText;
+      let desc = $($(x).closest('tr').children()).get(1).innerText;
+      let unitPrice = $($(x).closest('tr').children()).get(2).innerText;
+      let qty = $($(x).closest('tr').children()).get(3).innerText;
+      $('#uitemId').val(id);
+      $('#uitemDesc').val(desc);
+      $('#uitemPrice').val(unitPrice);
+      $('#uitemQty').val(qty);
+    }
+
+    function deleteItem(x) {
+      if (confirm('Are You Sure?')) {
+        let id = $($(x).closest('tr').children()).get(0).innerText;
+        $.ajax({
+          url: '/item?itemId=' + id,
+          method: 'DELETE',
+          contentType: 'application/json',
+          success: (res) => {
+            if (res.status == 'Success') {
+              alert(res.status);
+              window.location.reload()
+            }
+          },
+          error: (err) => {
+            alert(err.responseJSON.status);
+          }
+        })
+      }
+    }
+
+    function updateItemData() {
+      if (confirm('Are You Sure?')) {
+        let id = $('#uitemId').val();
+        let data = {
+          itemId: $('#uitemId').val(),
+          itemDesc: $('#uitemDesc').val(),
+          itemPrice: $('#uitemPrice').val(),
+          itemQty: $('#uitemQty').val()
+        };
+        $.ajax({
+          url: '/item?itemId=' + id,
+          method: 'PUT',
+          data: JSON.stringify(data),
+          contentType: 'application/json',
+          success: (res) => {
+            if (res.status == 'Success') {
+              alert(res.status);
+              window.location.reload()
+            }
+          },
+          error: (err) => {
+            alert(err.responseJSON.status);
+          }
+        });
+      }
+    }
+
+    $('#btnSave').on('click', (event) => {
+      let fData = {
+        itemId: $('#itemId').val(),
+        itemDesc: $('#itemDesc').val(),
+        itemPrice: $('#itemPrice').val(),
+        itemQty: $('#itemQty').val()
+      };
+      $.ajax({
+        url: '/item',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(fData),
+        success: (data) => {
+          console.log(data);
+          alert(data.status)
+          window.location.reload();
+        }
+      })
+    });
+  </script>
+</body>
+
 </html>
