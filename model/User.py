@@ -1,3 +1,4 @@
+from enum import unique
 from application import db
 from dataclasses import dataclass
 
@@ -9,7 +10,7 @@ class User(db.Model):
     password: str
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    email = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False,unique=True)
     password = db.Column(db.String(100), nullable=False)
 
     def __init__(self, email, password):

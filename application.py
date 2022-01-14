@@ -16,14 +16,46 @@ UserData = namedtuple("UserData", ['email', 'password'])
 import model.Item as Item
 from model.User import User
 
+
 db.create_all()
 db.session.commit()
 
 
 @application.route('/')
 def route_home():
+    return render_template('login.html')
+
+@application.route('/dash',methods=['GET'])
+def route_dash():
     return render_template('index.html')
 
+@application.route('/reg',methods=['POST','GET'])
+def route_reg():
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            data = UserData(**data)
+            user = User(data.email,data.password)
+            db.session.add(user)
+            db.session.commit()
+            return jsonify({'status': 'Success', 'data': user}), 200
+        except Exception as e:
+            return jsonify({'status': 'Can not create user', 'data': e.__cause__}), 400
+    elif request.method == 'GET':
+        return render_template('reg.html')
+
+@application.route('/login',methods=['POST','GET'])
+def route_login():
+    if request.method == 'POST':
+        try:
+            data = request.get_json()
+            data = UserData(**data)
+            user = User.query.filter(User.email == data.email,User.password == data.password).one()
+            return jsonify({'status': 'Success', 'data': True}), 200
+        except Exception as e:
+            return jsonify({'status': 'User Not Found', 'data': e.__cause__}), 400
+    elif request.method == 'GET':
+        return render_template('login.html')
 
 @application.route('/item/<id>', methods=['GET'])
 def route_item_search(id):

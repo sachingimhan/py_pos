@@ -15,6 +15,7 @@
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
+            <h1 class="d-flex justify-content-center">PY POS</h1>
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
@@ -23,17 +24,26 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col">
-                                <input class="form-control" type="email" placeholder="Email">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input id="email" class="form-control" type="email" placeholder="Email">
+                                </div>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <input class="form-control" type="password" placeholder="Password">
+                                <div class="from-group">
+                                    <label for="password">Password</label>
+                                    <input id="password" class="form-control" type="password" placeholder="Password">
+                                </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <button class="btn btn-primary float-end">Login</button>
+                                <a href="/reg">Sign Up</a>
+                            </div>
+                            <div class="col">
+                                <button id="btnLogin" class="btn btn-primary float-end">Login</button>
                             </div>
                         </div>
                     </div>
@@ -50,7 +60,7 @@
     ></script>
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-      integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+      integrity="sha38search4-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
       crossorigin="anonymous"
     ></script>
     <script
@@ -58,5 +68,30 @@
       integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
       crossorigin="anonymous"
     ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('#btnLogin').on('click',(e)=>{
+            let email = $('#email').val();
+            let password = $('#password').val();
+            $.ajax({
+                url:'/login',
+                method:'POST',
+                contentType:'application/json',
+                data:JSON.stringify({
+                    email:email,
+                    password:password
+                }),
+                success:(res)=>{
+                    alert(res.status);
+                    if(res.data == true){
+                        location.href = '/dash';
+                    }
+                },
+                error:(err)=>{
+                    alert(err.responseJSON.status);
+                }
+            })
+        });
+    </script>
 </body>
 </html>

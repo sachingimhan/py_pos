@@ -15,6 +15,7 @@
 <body>
     <div class="container mt-5">
         <div class="row justify-content-center">
+            <h1 class="d-flex justify-content-center">PY POS</h1>
             <div class="col-6">
                 <div class="card">
                     <div class="card-header">
@@ -23,25 +24,20 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col">
-                                <input class="form-control" type="text" placeholder="First Name">
-                            </div>
-                            <div class="col">
-                                <input class="form-control" type="text" placeholder="Last Name">
+                                <input id="email" class="form-control" type="email" placeholder="Email">
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col">
-                                <input class="form-control" type="email" placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <input class="form-control" type="password" placeholder="Password">
+                                <input id="password" class="form-control" type="password" placeholder="Password">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col">
-                                <button class="btn btn-success float-end">Register</button>
+                                <a href="/login">Login</a>
+                            </div>
+                            <div class="col">
+                                <button id="btnReg" class="btn btn-success float-end">Register</button>
                             </div>
                         </div>
                     </div>
@@ -66,5 +62,31 @@
       integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
       crossorigin="anonymous"
     ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $('#btnReg').on('click',(e)=>{
+            let email = $('#email').val();
+            let password = $('#password').val();
+            if(!email || !password){
+                alert("Email or Password Empty");
+                return;
+            }
+            $.ajax({
+                url:'/reg',
+                method:'POST',
+                data:JSON.stringify({
+                    email:email,
+                    password:password
+                }),
+                contentType:'application/json',
+                success:(res)=>{
+                    alert(res.status);
+                },
+                error:(err)=>{
+                    alert(err.responseJSON.status);
+                }
+            })
+        });
+    </script>
 </body>
 </html>
